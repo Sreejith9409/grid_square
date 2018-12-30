@@ -1,0 +1,29 @@
+<% if @users_hash.present? %>
+ 	<table style="width:100%" class="table table-bordered">
+	 	<thead >
+			<tr>
+				<th class="text-center">User Name</th>
+				<th class="text-center">Selected Color</th>
+				<th class="text-center">Favorite Color</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @users_hash.each do |k, v| %>
+				<tr>
+					<% 
+						counts = Hash.new(0)
+						v.each { |name| counts[name] += 1 }
+						max_count = counts.values.max
+						fav_color = counts.invert[max_count]
+						values = v.uniq.join(",") 
+					%>
+					<% if values.present? %>
+						<td><%= k %></td>
+						<td><%= v.uniq.join(",")%></td>
+						<td style="background-color: <%= fav_color%>"><%= fav_color %></td>
+					<% end %>
+				</tr>
+			<% end %>
+		</tbody>
+	</table> 
+<% end %>

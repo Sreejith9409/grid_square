@@ -16,7 +16,14 @@
       
       <ul class="nav navbar-nav navbar-right">
         <% if current_user.present? %>
+
           <li style="margin-top: 15px"><font color="red">Logged in as <%= current_user.user_name %>.</font></li>
+          <li>
+            <%= link_to "Square Board",root_path %>
+          </li>
+          <li>
+            <%= link_to "Leader Board",square_board_leader_board_path(1) %>
+          </li>
           <li>
             <%= link_to "Sign Out",logout_path %>
           </li>

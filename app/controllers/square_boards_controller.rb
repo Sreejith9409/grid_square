@@ -11,7 +11,16 @@ class SquareBoardsController < ApplicationController
 			errors = square_board.errors.full_messages.join("</br>") 
 		end
 		title = "Last Updated By #{data_hash[params[:key].to_i][0]} at #{CommonUtils.format_date_time data_hash[params[:key].to_i][2]}"
-	  render json: {is_updated: errors.blank?, errors: errors, color: params[:color], key: params[:key], title: title} and return
-		
+	  render json: {is_updated: errors.blank?, errors: errors, color: params[:color], key: params[:key], title: title} and return		
 	end
+
+	def leader_board
+		square_board = SquareBoard.where(id: params[:square_board_id]).last
+		@users_hash = {}
+		square_board.cols_data_hash.each do |k,v|
+			@users_hash[v[0]] ||= []
+			@users_hash[v[0]] << v[1]
+		end
+	end
+
 end

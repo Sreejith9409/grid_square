@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
 	resources :square_boards do 
 		post :update_square_board
+		get  :leader_board
 	end
 	get 'signup', to: 'users#new', as: 'signup'
 	get 'login', to: 'sessions#new', as: 'login'
