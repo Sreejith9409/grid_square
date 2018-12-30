@@ -1,0 +1,111 @@
+<% if @square_grid.present? %>
+  <div>
+    <div class="box-header grd-white corner-top">
+      <h3 style="text-align: center;margin-bottom: 25px;"><u>Square Grid <%= @square_grid.rows %> * <%= @square_grid.cols %></u></h3>
+    </div>
+    <div class="form-horizontal">
+      <div class="box-body">
+        <div class="form-group" >
+          <label class="col-md-2">Please Select a Color:</label>
+          <div class ="controls col-md-3" ><input type="color" name="favcolor" value="#000000" id = "color_chooser"></div>
+        </div>
+        </br>
+        <div class="form-group">
+          <div class ="controls" >
+            <SquareGrid>
+              <% @square_grid.cols_data_hash.each do |k,v| %>
+                <% 
+                  if v.present?
+                    style = "background-color:#{v[1]}"
+                    title = "Last Updated By #{v[0]} at #{CommonUtils.format_date_time v[2]}"
+                  else
+                    style = ""
+                    title = ""
+                  end
+                %>
+                <div id= "grid_<%= k %>" class="item" style = "<%= style %>" title = "<%= title %>" onclick = "updateColorForGrid(<%= @square_grid.id %>, <%= k %>)"><%= k %></div>
+              <% end %>
+            </SquareGrid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<style type="text/css">
+  .item{
+    background-size: cover;
+    background-position: center center;
+    background-color: white;
+    border: 1px solid black;
+    text-align: center
+  }
+
+  /*This is the component code that comes with 3 variables for modification*/
+
+  SquareGrid{
+    /*The content width you use on your website*/
+    --content-width: 80vw;
+  
+    /*The size of the gutter  */
+    --gutter: 10px;
+  
+    /*The amount of columns*/
+    --columns: 1;
+  
+    /*This is the calculation for the row height.   */
+    --row-size: calc(
+      ( var(--content-width) - (var(--gutter) * (var(--columns) - 1))
+      ) / var(--columns)
+    );
+  
+    display: grid;
+
+    width: 100%;
+    max-width: var(--content-width);
+  
+    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-auto-rows: var(--row-size);
+
+    grid-column-gap: var(--gutter);
+    grid-row-gap: var(--gutter);
+
+  }
+
+
+ /*This is again demo. Just decide with media queries when to add another column */
+  @media{
+    SquareGrid{
+      --columns: 20;
+    }
+  }
+</style>
+
+<script type="text/javascript">
+  function updateColorForGrid(gridId, key){
+    if($('#color_chooser').length > 0 && $('#color_chooser').val() != "#000000"){
+      var color = $('#color_chooser').val();
+      if  (confirm('Are you sure you want to update selected color to column '+ key + ' ?')) {
+        $.ajax({
+          url: "/square_boards/"+gridId+"/update_square_board",                
+          dataType: "json",
+          type: "post",
+          data: {key: key, color: color},
+          success: function(result){
+            if(result["is_updated"] == true){
+              document.getElementById("grid_"+result["key"]).style.backgroundColor = result["color"];
+              document.getElementById("grid_"+result["key"]).title = result["title"];
+              alert("Updated Successfully")
+            }else{
+              alert(result["errors"])
+            }
+          }
+        });
+      }
+    }else{
+      alert("Please Select a valid color to continue");
+    }
+    
+  }
+</script>
