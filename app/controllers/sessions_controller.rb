@@ -1,6 +1,4 @@
 class SessionsController < ApplicationController
-  def new
-  end
 
 	def create
 		user = User.where("user_name = ? or email = ?", params[:name], params[:name]).first
