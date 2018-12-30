@@ -22,7 +22,12 @@ Capybara.register_driver :selenium_chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
 Capybara.default_driver = :selenium_chrome
-Capybara.app_host = 'http://localhost:3000'
+if Rails.env.development?
+  Capybara.app_host = 'http://localhost:3000'
+else
+  #Configure the URL
+  Capybara.app_host = ''
+end
 
 # Capybara's default javascript_driver is Selenium, But we are going to use our customized selenium driver
 Capybara.javascript_driver = :selenium_chrome
