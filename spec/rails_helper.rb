@@ -16,6 +16,16 @@ if Rails.env.test? || Rails.env.development?
   SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
   SimpleCov.start(:rails)
 end
+
+# Selenium driver configuration to use chrome as a browser instead of default browser(firefox)
+Capybara.register_driver :selenium_chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+Capybara.default_driver = :selenium_chrome
+Capybara.app_host = 'http://localhost:3000'
+
+# Capybara's default javascript_driver is Selenium, But we are going to use our customized selenium driver
+Capybara.javascript_driver = :selenium_chrome
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -51,11 +61,18 @@ RSpec.configure do |config|
   config.before(:each) do |example|
     DatabaseCleaner.clean
   end
+  
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
 
+  config.append_after(:each) do
+    DatabaseCleaner.clean
+  end
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and

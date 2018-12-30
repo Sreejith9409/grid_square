@@ -31,7 +31,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to root_path, notice: "User was successfully with username is #{@user.user_name}. Login to continue" }
+        format.html { redirect_to root_path, notice: "User was successfully created with username is #{@user.user_name}. Login to continue" }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
