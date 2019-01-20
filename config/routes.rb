@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 	get 'users/index'
 	root 'users#index'
-  
+  mount ActionCable.server => '/cable'  
 	resources :users
 	resources :sessions, only: [:new, :create, :destroy]
 

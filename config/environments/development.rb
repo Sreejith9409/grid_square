@@ -49,6 +49,10 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  #Action cable config
+  config.action_cable.url = 'ws://localhost:3000/cable'
+  config.action_cable.allowe*d_request_origins = [ 'http://localhost:3000', 'http://127.0.0.1:3000' ]
+
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
