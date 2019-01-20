@@ -1,9 +1,9 @@
 class User < ApplicationRecord
 	validates :name, presence: true
-	validates :email, presence: true, uniqueness: true
+	# validates :email, presence: true, uniqueness: true
 
-	validate :validate_email
-	after_create :generate_username
+	# validate :validate_email
+	# after_create :generate_username
 
 	EMAIL_FORMAT = /(\A(\s*)\Z)|(\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z)/i
 
@@ -19,4 +19,13 @@ class User < ApplicationRecord
 			self.save
 		end
 	end
+
+  def self.generate_new_user(remote_ip)
+    user = User.new
+    user.user_name = SecureRandom.alphanumeric
+    user.name = user.user_name 
+    user.remote_ip = remote_ip
+    user.save
+    user
+  end
 end

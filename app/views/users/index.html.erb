@@ -5,10 +5,8 @@
 
   <%= form_tag sessions_path do |form| %>
     <div class="form-group">
-      <%= label_tag :name %>
-      <%= text_field_tag :name, "",{:placeholder => "Enter User Name or Email"} %>
-      <div class="btn btn-secondary">
-        <%= submit_tag "Login" %>
+      <div class="btn btn-secondary center">
+        <%= submit_tag "Start Session", :class => "btn btn-primary"%>
       </div>
     </div>
   <% end %>
